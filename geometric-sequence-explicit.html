@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geometric Sequences — Explicit Formula</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF2F6;
+    --surface:#FFFFFF;
+    --ink:#1C2541;
+    --muted:#5C6B8A;
+    --line:#C7D2E0;
+    --ab:#E4572E;
+    --bc:#17A398;
+    --ac:#3E5C76;
+    --accent:#FFB400;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Space Grotesk', system-ui, sans-serif;
+    min-height:100vh;
+  }
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:28px 20px 60px;
+  }
+  header.top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:22px;
+  }
+  .title-block h1{
+    font-size:25px;
+    font-weight:700;
+    margin:0 0 4px;
+    letter-spacing:-0.01em;
+  }
+  .title-block p{
+    margin:0;
+    color:var(--muted);
+    font-size:14.5px;
+    max-width:54ch;
+  }
+  nav.tabs{
+    display:flex;
+    gap:6px;
+    background:var(--surface);
+    padding:5px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    flex-shrink:0;
+  }
+  nav.tabs button{
+    border:none;
+    background:transparent;
+    color:var(--muted);
+    font-family:inherit;
+    font-size:14px;
+    font-weight:600;
+    padding:9px 18px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  nav.tabs button.active{
+    background:var(--ink);
+    color:#fff;
+  }
+  section{ display:none; }
+  section.active{ display:block; }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px 26px 22px;
+    margin-bottom:20px;
+  }
+
+  .sim-intro{
+    font-size:15px;
+    line-height:1.55;
+    color:var(--muted);
+    margin:0 0 22px;
+    max-width:66ch;
+  }
+  .sim-intro b{ color:var(--ink); }
+
+  .postulate-banner{
+    background:var(--ink);
+    color:#fff;
+    border-radius:var(--radius);
+    padding:16px 22px;
+    margin-bottom:24px;
+  }
+  .postulate-banner .eq{
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:0.01em;
+    margin-bottom:10px;
+  }
+  .postulate-banner .eq .n{ color:#a9c3dd; }
+  .postulate-banner .eq .a{ color:#ffb199; }
+  .postulate-banner .eq .r{ color:#7fe3d6; }
+  .postulate-banner ul{
+    margin:0;
+    padding-left:18px;
+    font-size:13.5px;
+    line-height:1.7;
+    color:#dfe4f0;
+  }
+  .postulate-banner li b{ color:#fff; }
+
+  .controls-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .slider-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    color:var(--muted);
+    font-weight:600;
+  }
+  .slider-group input[type=range]{
+    width:110px;
+    accent-color:var(--ac);
+  }
+  .slider-group .pill-val{
+    color:var(--ink);
+    font-weight:700;
+  }
+  button.pill{
+    border:none;
+    background:var(--accent);
+    color:var(--ink);
+    font-family:inherit;
+    font-weight:700;
+    font-size:13.5px;
+    padding:9px 18px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:transform .12s ease;
+  }
+  button.pill:hover{ transform:translateY(-1px); }
+  button.pill:active{ transform:translateY(0); }
+
+  .practice-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    background:#F6F4EC;
+    border:1px solid #E7DFC6;
+    border-radius:10px;
+    padding:12px 16px;
+    margin-bottom:22px;
+  }
+  .practice-row .label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .switch{
+    position:relative;
+    width:40px; height:22px;
+    flex-shrink:0;
+  }
+  .switch input{ opacity:0; width:0; height:0; }
+  .switch .track-sw{
+    position:absolute; inset:0;
+    background:var(--line);
+    border-radius:999px;
+    transition:background .18s ease;
+    cursor:pointer;
+  }
+  .switch .track-sw::before{
+    content:"";
+    position:absolute;
+    width:16px; height:16px;
+    left:3px; top:3px;
+    background:#fff;
+    border-radius:50%;
+    transition:transform .18s ease;
+  }
+  .switch input:checked + .track-sw{ background:var(--ac); }
+  .switch input:checked + .track-sw::before{ transform:translateX(18px); }
+
+  .status-line{
+    font-size:13.5px;
+    font-weight:600;
+    padding:10px 16px;
+    border-radius:10px;
+    margin-bottom:16px;
+    display:none;
+  }
+  .status-line.show{ display:block; }
+  .status-line.info{ background:#F8FAFC; border:1px solid var(--line); color:var(--muted); }
+  .status-line.correct{ background:#F3F8F6; border:1px solid #cdeae1; color:#0f6b57; }
+
+  .func-display{
+    background:#F8FAFC;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 18px;
+    margin-bottom:18px;
+    font-size:20px;
+    font-weight:700;
+    color:var(--ac);
+    text-align:center;
+  }
+  .func-display .fa{ color:var(--ab); }
+  .func-display .fr{ color:var(--bc); }
+
+  /* ---------- sequence display ---------- */
+  .seq-wrap{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:6px;
+    flex-wrap:wrap;
+    margin:8px 0 18px;
+  }
+  .seq-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:5px;
+  }
+  .seq-item .idx{
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--muted);
+  }
+  .term{
+    min-width:60px;
+    padding:13px 10px;
+    text-align:center;
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    font-size:20px;
+    font-weight:700;
+    color:var(--ink);
+    background:#fff;
+  }
+  .term.target{
+    border-style:dashed;
+    border-color:var(--ac);
+    color:var(--ac);
+    background:#F8FAFC;
+    min-width:90px;
+  }
+  .term.target.revealed{
+    border-style:solid;
+    color:#0f6b57;
+    border-color:#cdeae1;
+    background:#F3F8F6;
+  }
+  .chip-between{
+    align-self:flex-start;
+    margin-top:14px;
+    min-width:34px;
+    text-align:center;
+    font-size:12px;
+    font-weight:700;
+    color:var(--bc);
+  }
+  .chip-spacer{ min-width:34px; }
+  .dots{
+    align-self:flex-start;
+    margin-top:12px;
+    font-size:22px;
+    font-weight:700;
+    color:var(--muted);
+    padding:0 4px;
+  }
+
+  /* ---------- step blanks ---------- */
+  .steps{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:6px;
+  }
+  .step{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+  .step .stepnum{
+    flex-shrink:0;
+    width:24px;height:24px;
+    border-radius:50%;
+    background:var(--ink);
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step .stepbody{ flex:1; }
+  .step .stepbody .label{ font-size:13px; color:var(--muted); font-weight:600; margin-bottom:6px; }
+  .step .stepbody .expr{ font-size:16px; font-weight:700; }
+  .step.final{ border-color:#cdeae1; background:#F3F8F6; }
+  .step.final .expr{ color:#0f6b57; font-size:17px; }
+  .step.locked{ opacity:0.45; }
+
+  .answer-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+  .answer-row input[type=text]{
+    font-family:inherit;
+    font-size:15px;
+    padding:8px 12px;
+    border:1.5px solid var(--line);
+    border-radius:8px;
+    width:100px;
+    color:var(--ink);
+  }
+  .answer-row input[type=text]:focus{ outline:none; border-color:var(--ac); }
+  .answer-row .check-btn{
+    border:none;
+    background:var(--ink);
+    color:#fff;
+    font-family:inherit;
+    font-weight:600;
+    font-size:13.5px;
+    padding:9px 18px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .answer-row .join{ font-weight:700; color:var(--muted); }
+  .step-feedback{ font-size:13px; font-weight:600; margin-top:8px; display:none; }
+  .step-feedback.correct{ color:#0f6b57; display:block; }
+  .step-feedback.incorrect{ color:#b3261e; display:block; }
+
+  /* ---------- Tasks page ---------- */
+  .tasks-intro{
+    font-size:15px;
+    color:var(--muted);
+    line-height:1.55;
+    margin:0 0 24px;
+    max-width:64ch;
+  }
+  .task-list{ display:flex; flex-direction:column; gap:16px; }
+  .task{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 20px;
+  }
+  .task .num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:24px;height:24px;
+    border-radius:50%;
+    background:var(--ink);
+    color:#fff;
+    font-size:12.5px;
+    font-weight:700;
+    margin-right:10px;
+  }
+  .task .prompt{ font-size:15px; line-height:1.6; margin-bottom:12px; }
+  .task .prompt b{ color:var(--ink); }
+  .task .answer-row{ margin-top:0; }
+  .task .answer-row input[type=text]{ width:90px; }
+  .task button.check-btn{
+    border:none;
+    background:var(--ink);
+    color:#fff;
+    font-family:inherit;
+    font-weight:600;
+    font-size:13.5px;
+    padding:8px 16px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  .task button.hint-btn{
+    border:none;
+    background:transparent;
+    color:var(--muted);
+    font-family:inherit;
+    font-size:13px;
+    text-decoration:underline;
+    cursor:pointer;
+    padding:8px 4px;
+  }
+  .task .feedback{ margin-top:10px; font-size:13.5px; font-weight:600; display:none; }
+  .task .feedback.correct{ color:#0f6b57; }
+  .task .feedback.incorrect{ color:#b3261e; }
+  .task .solution{
+    margin-top:8px; font-size:13px; color:var(--muted);
+    display:none; line-height:1.6; white-space:pre-line;
+  }
+  .score-bar{
+    margin-top:22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--ink);
+    color:#fff;
+    border-radius:12px;
+    padding:14px 20px;
+    font-size:14px;
+    font-weight:600;
+  }
+  #scoreVal{ color:var(--accent); }
+
+  @media (max-width:560px){
+    header.top{ flex-direction:column; }
+    nav.tabs{ align-self:flex-start; }
+    .term{ min-width:48px; font-size:16px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="title-block">
+      <h1>Geometric Sequences — Explicit Formula</h1>
+      <p>Find the formula once, then jump straight to any term without listing all the ones before it.</p>
+    </div>
+    <nav class="tabs">
+      <button id="tabSimBtn" class="active">Simulation</button>
+      <button id="tabTasksBtn">Practice Tasks</button>
+    </nav>
+  </header>
+
+  <!-- ================= SIMULATION PAGE ================= -->
+  <section id="sim" class="active">
+    <div class="card">
+
+      <div class="postulate-banner">
+        <div class="eq"><span class="n">a<sub>n</sub></span> = <span class="a">a<sub>1</sub></span> · <span class="r">r</span><sup>n − 1</sup></div>
+        <ul>
+          <li>A <b>geometric sequence</b> multiplies by the same number each time. That number is the <b>common ratio r</b>.</li>
+          <li><b>a₁</b> is the first term, <b>n</b> is the position of the term you want, and <b>aₙ</b> is that term.</li>
+          <li>To find r, divide any term by the term before it. Then the formula lets you jump to <b>any</b> term directly.</li>
+        </ul>
+      </div>
+
+      <p class="sim-intro">Change the first term, the ratio, and which term you want. The formula fills in with your numbers, and the term <b>aₙ</b> is found without listing every term in between. In practice mode you build it yourself, step by step.</p>
+
+      <div class="controls-row">
+        <div class="slider-group">
+          First term a₁
+          <input type="range" id="a1Slider" min="1" max="6" step="1" value="3">
+          <span class="pill-val" id="a1Label">3</span>
+        </div>
+        <div class="slider-group">
+          Ratio r
+          <input type="range" id="rSlider" min="0" max="4" step="1" value="2">
+          <span class="pill-val" id="rLabel">2</span>
+        </div>
+        <div class="slider-group">
+          Term number n
+          <input type="range" id="nSlider" min="5" max="8" step="1" value="7">
+          <span class="pill-val" id="nLabel">7</span>
+        </div>
+        <button class="pill" id="randomizeBtn">Randomize</button>
+      </div>
+
+      <div class="practice-row">
+        <label class="label">
+          <span class="switch">
+            <input type="checkbox" id="practiceToggle">
+            <span class="track-sw"></span>
+          </span>
+          Practice mode: find the ratio, the formula, and the term yourself
+        </label>
+        <button class="pill" id="newChallengeBtn" style="display:none;">New challenge</button>
+      </div>
+
+      <div class="status-line" id="statusLine"></div>
+
+      <div class="func-display" id="funcDisplay"></div>
+
+      <div class="seq-wrap" id="seqWrap"></div>
+
+      <div class="steps" id="stepsList"></div>
+    </div>
+  </section>
+
+  <!-- ================= TASKS PAGE ================= -->
+  <section id="tasks">
+    <div class="card">
+      <p class="tasks-intro">Use <b>aₙ = a₁ · rⁿ⁻¹</b>. Some tasks ask for the formula (fill in a₁ and r), others ask for a particular term. Type your answers and press Check.</p>
+
+      <div class="task-list" id="taskList"></div>
+
+      <div class="score-bar">
+        <span>Progress</span>
+        <span><span id="scoreVal">0</span> / <span id="scoreTotal">0</span> correct</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  // ---------- Tab switching ----------
+  const tabSimBtn = document.getElementById('tabSimBtn');
+  const tabTasksBtn = document.getElementById('tabTasksBtn');
+  const simSection = document.getElementById('sim');
+  const tasksSection = document.getElementById('tasks');
+  tabSimBtn.addEventListener('click', () => {
+    tabSimBtn.classList.add('active'); tabTasksBtn.classList.remove('active');
+    simSection.classList.add('active'); tasksSection.classList.remove('active');
+  });
+  tabTasksBtn.addEventListener('click', () => {
+    tabTasksBtn.classList.add('active'); tabSimBtn.classList.remove('active');
+    tasksSection.classList.add('active'); simSection.classList.remove('active');
+  });
+
+  function parseNum(s){ return parseFloat(String(s).replace(/[()\s]/g, '')); }
+  function paren(r){ return r < 0 ? '(' + r + ')' : String(r); }
+
+  // ================= SIMULATION =================
+  const R_VALUES = [-3, -2, 2, 3, 4];
+  const a1Slider = document.getElementById('a1Slider');
+  const rSlider = document.getElementById('rSlider');
+  const nSlider = document.getElementById('nSlider');
+  const a1Label = document.getElementById('a1Label');
+  const rLabel = document.getElementById('rLabel');
+  const nLabel = document.getElementById('nLabel');
+  const randomizeBtn = document.getElementById('randomizeBtn');
+  const practiceToggle = document.getElementById('practiceToggle');
+  const newChallengeBtn = document.getElementById('newChallengeBtn');
+  const statusLine = document.getElementById('statusLine');
+  const funcDisplay = document.getElementById('funcDisplay');
+  const seqWrap = document.getElementById('seqWrap');
+  const stepsList = document.getElementById('stepsList');
+
+  let a1 = 3, r = 2, n = 7;
+  let practiceMode = false;
+  let currentStepIndex = 0;
+
+  function term(k){ return a1 * Math.pow(r, k-1); }
+
+  function stepDefs(){
+    const pw = Math.pow(r, n-1);
+    return [
+      { title:'Find the common ratio: divide a term by the term before it',
+        blank:`r = ${term(2)} ÷ ${term(1)} = ___`, solved:`r = ${term(2)} ÷ ${term(1)} = ${r}`,
+        answer:r },
+      { title:'Write the explicit formula aₙ = a₁ · rⁿ⁻¹ by filling in a₁ and r',
+        blank:`aₙ = ___ · (___)<sup>n − 1</sup>`, solved:`aₙ = ${a1} · ${paren(r)}<sup>n − 1</sup>`,
+        dual:true, answer:[a1, r] },
+      { title:`Use the formula for term number ${n}: find the exponent n − 1`,
+        blank:`n − 1 = ${n} − 1 = ___`, solved:`n − 1 = ${n} − 1 = ${n-1}`,
+        answer:n-1 },
+      { title:`Evaluate the power of the ratio`,
+        blank:`${paren(r)}<sup>${n-1}</sup> = ___`, solved:`${paren(r)}<sup>${n-1}</sup> = ${pw}`,
+        answer:pw },
+      { title:`Multiply by a₁ to get the term a<sub>${n}</sub>`,
+        blank:`a<sub>${n}</sub> = ${a1} × ${paren(pw)} = ___`, solved:`a<sub>${n}</sub> = ${a1} × ${paren(pw)} = ${term(n)}`,
+        answer:term(n) }
+    ];
+  }
+
+  function render(){
+    const defs = stepDefs();
+    const total = defs.length;
+    const idx = practiceMode ? currentStepIndex : total;
+
+    // formula display
+    funcDisplay.innerHTML = (idx >= 2)
+      ? `a<sub>n</sub> = <span class="fa">${a1}</span> · <span class="fr">${paren(r)}</span><sup>n − 1</sup>`
+      : `a<sub>n</sub> = ?`;
+
+    // sequence display
+    const showChips = idx >= 1;
+    let h = '';
+    for(let k=1;k<=4;k++){
+      h += `<div class="seq-item"><div class="term">${term(k)}</div><div class="idx">a<sub>${k}</sub></div></div>`;
+      h += showChips ? `<div class="chip-between">×${paren(r)}</div>` : `<div class="chip-spacer"></div>`;
+    }
+    h += `<div class="dots">…</div>`;
+    const done = idx >= total;
+    h += `<div class="seq-item"><div class="term target ${done?'revealed':''}">${done ? term(n) : '?'}</div><div class="idx">a<sub>${n}</sub></div></div>`;
+    seqWrap.innerHTML = h;
+
+    renderSteps(defs, idx);
+  }
+
+  function renderSteps(defs, idx){
+    const total = defs.length;
+    let html = '';
+    defs.forEach((d, i) => {
+      if(i < idx){
+        html += `<div class="step"><div class="stepnum">${i+1}</div><div class="stepbody">
+          <div class="label">${d.title}</div>
+          <div class="expr">${d.solved}</div></div></div>`;
+      } else if(i === idx){
+        const inputs = d.dual
+          ? `<input type="text" placeholder="a₁" id="guess${i}a"><span class="join">and r =</span><input type="text" placeholder="r" id="guess${i}b">`
+          : `<input type="text" placeholder="?" id="guess${i}">`;
+        html += `<div class="step"><div class="stepnum">${i+1}</div><div class="stepbody">
+          <div class="label">${d.title}</div>
+          <div class="expr">${d.blank}</div>
+          <div class="answer-row">${inputs}<button class="check-btn" id="check${i}">Check</button></div>
+          <div class="step-feedback" id="fb${i}"></div></div></div>`;
+      } else {
+        html += `<div class="step locked"><div class="stepnum">${i+1}</div><div class="stepbody">
+          <div class="label">${d.title}</div>
+          <div class="expr">?</div></div></div>`;
+      }
+    });
+
+    if(idx >= total){
+      html += `<div class="step final"><div class="stepnum">✓</div><div class="stepbody">
+        <div class="label">Result</div>
+        <div class="expr">a<sub>n</sub> = ${a1} · ${paren(r)}<sup>n − 1</sup>, so a<sub>${n}</sub> = ${term(n)}</div></div></div>`;
+    }
+
+    stepsList.innerHTML = html;
+
+    if(practiceMode && idx < total){
+      const d = defs[idx];
+      const fb = document.getElementById('fb' + idx);
+      const btn = document.getElementById('check' + idx);
+      let inputs;
+      if(d.dual){
+        inputs = [document.getElementById('guess' + idx + 'a'), document.getElementById('guess' + idx + 'b')];
+      } else {
+        inputs = [document.getElementById('guess' + idx)];
+      }
+      function advance(){
+        fb.className = 'step-feedback correct';
+        fb.textContent = 'Correct!';
+        currentStepIndex += 1;
+        if(currentStepIndex >= total){
+          statusLine.className = 'status-line show correct';
+          statusLine.textContent = 'a' + n + ' = ' + term(n) + ' — found directly with the explicit formula!';
+        }
+        setTimeout(render, 300);
+      }
+      function check(){
+        const raws = inputs.map(el => el.value.trim());
+        if(raws.some(v => v === '')) return;
+        const vals = raws.map(parseNum);
+        if(d.dual){
+          const okA = !isNaN(vals[0]) && Math.abs(vals[0] - d.answer[0]) < 0.05;
+          const okR = !isNaN(vals[1]) && Math.abs(vals[1] - d.answer[1]) < 0.05;
+          if(okA && okR){ advance(); return; }
+          fb.className = 'step-feedback incorrect';
+          fb.textContent = okA ? 'a₁ is right — check r (the common ratio you just found).'
+                         : okR ? 'r is right — check a₁ (the first term of the sequence).'
+                         : 'Not quite — a₁ is the first term and r is the common ratio.';
+        } else {
+          const ok = !isNaN(vals[0]) && Math.abs(vals[0] - d.answer) < 0.05;
+          if(ok){ advance(); return; }
+          fb.className = 'step-feedback incorrect';
+          fb.textContent = 'Not quite — try again.';
+        }
+      }
+      btn.addEventListener('click', check);
+      inputs.forEach(el => el.addEventListener('keydown', (e) => { if(e.key === 'Enter') check(); }));
+      inputs[0].focus();
+    }
+  }
+
+  function renderAll(){
+    a1 = parseInt(a1Slider.value, 10);
+    r = R_VALUES[parseInt(rSlider.value, 10)];
+    n = parseInt(nSlider.value, 10);
+    a1Label.textContent = a1;
+    rLabel.textContent = r;
+    nLabel.textContent = n;
+    [a1Slider, rSlider, nSlider].forEach(el => el.disabled = practiceMode);
+    render();
+  }
+
+  function randomize(){
+    a1Slider.value = 1 + Math.floor(Math.random()*6);
+    rSlider.value = Math.floor(Math.random()*R_VALUES.length);
+    nSlider.value = 5 + Math.floor(Math.random()*4);
+  }
+
+  function startNewChallenge(){
+    randomize();
+    currentStepIndex = 0;
+    statusLine.className = 'status-line show info';
+    statusLine.textContent = 'Find r, write the formula, then use it to find the term.';
+    renderAll();
+  }
+
+  practiceToggle.addEventListener('change', () => {
+    practiceMode = practiceToggle.checked;
+    newChallengeBtn.style.display = practiceMode ? 'inline-block' : 'none';
+    if(practiceMode){
+      startNewChallenge();
+    } else {
+      currentStepIndex = 0;
+      statusLine.className = 'status-line';
+      statusLine.textContent = '';
+      renderAll();
+    }
+  });
+  newChallengeBtn.addEventListener('click', startNewChallenge);
+  [a1Slider, rSlider, nSlider].forEach(el => el.addEventListener('input', renderAll));
+  randomizeBtn.addEventListener('click', () => { randomize(); renderAll(); });
+
+  renderAll();
+
+  // ================= PRACTICE TASKS =================
+  // kind 'formula': two blanks (a1 and r). kind 'term': one blank.
+  const tasks = [
+    { kind:'formula', prompt:"Find the explicit formula for the geometric sequence <b>3, 6, 12, 24, …</b>", a1:3, r:2,
+      solution:"a₁ = 3 (the first term).\nr = 6 ÷ 3 = 2.\nFormula: aₙ = 3 · 2ⁿ⁻¹." },
+    { kind:'formula', prompt:"Find the explicit formula for <b>5, 15, 45, 135, …</b>", a1:5, r:3,
+      solution:"a₁ = 5, r = 15 ÷ 5 = 3.\nFormula: aₙ = 5 · 3ⁿ⁻¹." },
+    { kind:'formula', prompt:"Find the explicit formula for <b>2, −6, 18, −54, …</b>", a1:2, r:-3,
+      solution:"a₁ = 2, r = −6 ÷ 2 = −3 (the signs alternate).\nFormula: aₙ = 2 · (−3)ⁿ⁻¹." },
+    { kind:'term', prompt:"The sequence is <b>4, 8, 16, 32, …</b> Find the 8th term, <b>a₈</b>.", answer:512,
+      solution:"a₁ = 4, r = 2.\na₈ = 4 · 2⁷ = 4 · 128 = 512." },
+    { kind:'term', prompt:"The sequence is <b>2, 6, 18, 54, …</b> Find the 6th term, <b>a₆</b>.", answer:486,
+      solution:"a₁ = 2, r = 3.\na₆ = 2 · 3⁵ = 2 · 243 = 486." },
+    { kind:'term', prompt:"A sequence has the explicit formula <b>aₙ = 5 · 2ⁿ⁻¹</b>. Find <b>a₇</b>.", answer:320,
+      solution:"a₇ = 5 · 2⁶ = 5 · 64 = 320." },
+    { kind:'term', prompt:"A geometric sequence has <b>a₁ = 1</b> and <b>r = 4</b>. Find <b>a₅</b>.", answer:256,
+      solution:"a₅ = 1 · 4⁴ = 256." },
+    { kind:'term', prompt:"A rumor starts with 2 people on day 1, and the number of people who know it triples each day. How many people know it on day 5?", answer:162,
+      solution:"Geometric: a₁ = 2, r = 3.\na₅ = 2 · 3⁴ = 2 · 81 = 162 people." },
+    { kind:'term', prompt:"In a geometric sequence, <b>a₂ = 6</b> and <b>a₃ = 18</b>. Find <b>a₅</b>.", answer:162,
+      solution:"r = a₃ ÷ a₂ = 18 ÷ 6 = 3.\na₁ = 6 ÷ 3 = 2, so aₙ = 2 · 3ⁿ⁻¹.\na₅ = 2 · 3⁴ = 162." }
+  ];
+
+  const taskList = document.getElementById('taskList');
+  const scoreVal = document.getElementById('scoreVal');
+  const scoreTotal = document.getElementById('scoreTotal');
+  scoreTotal.textContent = tasks.length;
+  let correctCount = 0;
+  const solvedFlags = new Array(tasks.length).fill(false);
+
+  tasks.forEach((t, i) => {
+    const div = document.createElement('div');
+    div.className = 'task';
+    const answerHtml = t.kind === 'formula'
+      ? `aₙ = <input type="text" placeholder="a₁" id="ansA${i}"> · ( <input type="text" placeholder="r" id="ansR${i}"> )<sup>n − 1</sup>`
+      : `<input type="text" placeholder="Answer" id="ans${i}">`;
+    div.innerHTML = `
+      <div class="prompt"><span class="num">${i+1}</span>${t.prompt}</div>
+      <div class="answer-row">
+        ${answerHtml}
+        <button class="check-btn" id="check${i}">Check</button>
+        <button class="hint-btn" id="hint${i}">Show solution</button>
+      </div>
+      <div class="feedback" id="fb${i}"></div>
+      <div class="solution" id="sol${i}">${t.solution}</div>
+    `;
+    taskList.appendChild(div);
+
+    const fb = div.querySelector('#fb' + i);
+    const sol = div.querySelector('#sol' + i);
+    const checkBtn = div.querySelector('#check' + i);
+    const hintBtn = div.querySelector('#hint' + i);
+    const inputs = t.kind === 'formula'
+      ? [div.querySelector('#ansA' + i), div.querySelector('#ansR' + i)]
+      : [div.querySelector('#ans' + i)];
+
+    function markSolved(){
+      fb.textContent = 'Correct!';
+      fb.className = 'feedback correct';
+      if(!solvedFlags[i]){
+        solvedFlags[i] = true;
+        correctCount++;
+        scoreVal.textContent = correctCount;
+      }
+    }
+
+    function checkAnswer(){
+      const raws = inputs.map(el => el.value.trim());
+      if(raws.some(v => v === '')) return;
+      const vals = raws.map(parseNum);
+      fb.style.display = 'block';
+      if(t.kind === 'formula'){
+        const okA = !isNaN(vals[0]) && Math.abs(vals[0] - t.a1) < 0.05;
+        const okR = !isNaN(vals[1]) && Math.abs(vals[1] - t.r) < 0.05;
+        if(okA && okR){ markSolved(); return; }
+        fb.className = 'feedback incorrect';
+        fb.textContent = okA ? 'a₁ is right — check r (divide a term by the term before it).'
+                       : okR ? 'r is right — check a₁ (the first term).'
+                       : 'Not quite — a₁ is the first term, and r is any term divided by the one before it.';
+      } else {
+        const ok = !isNaN(vals[0]) && Math.abs(vals[0] - t.answer) < 0.05;
+        if(ok){ markSolved(); return; }
+        fb.className = 'feedback incorrect';
+        fb.textContent = 'Not quite — find r and a₁ first, then use aₙ = a₁ · rⁿ⁻¹ and try again.';
+      }
+    }
+
+    checkBtn.addEventListener('click', checkAnswer);
+    inputs.forEach(el => el.addEventListener('keydown', (e) => { if(e.key === 'Enter') checkAnswer(); }));
+    hintBtn.addEventListener('click', () => {
+      sol.style.display = sol.style.display === 'block' ? 'none' : 'block';
+      hintBtn.textContent = sol.style.display === 'block' ? 'Hide solution' : 'Show solution';
+    });
+  });
+})();
+</script>
+</body>
+</html>
